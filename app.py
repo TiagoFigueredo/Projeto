@@ -115,7 +115,7 @@ def adArtigo(numero):
 
 
 
-@APP.route('/operador/<int:numero>/novaTransacao/Fatura')
+@APP.route('/operador/<int:numero>/novaTransacao/Fatura', methods=["GET","POST"])
 def Fatura(numero):
     operador = db.execute(
         '''
@@ -123,7 +123,26 @@ def Fatura(numero):
           FROM OPERADOR 
           WHERE  NumOP = %s
           ''', numero).fetchone()
-    return render_template('Fatura.html', operador=operador)
+    Nif=0
+    if request.method == "GET":
+        if request.args.get("OK") == "OK":
+            Nif = request.args.get("NIF")
+    elif(request.form["button"]=="CONFIRMAR"):
+            Nif = request.args.get("NIF")
+            transacao = db.execute(
+                '''
+                INSERT INTO FATURA(Nif,NumTransacao)
+                SELECT a.Nif,b.NumTransacao
+                FROM CLIENTE a JOIN (SELECT * FROM TRANSACAO ORDER BY NumTransacao DESC LIMIT 1) b ON a.Nif = %s;
+                ''',Nif).fetchone()
+    db.commit()
+    cliente = db.execute(
+        '''
+          SELECT *
+          FROM CLIENTE 
+          WHERE  Nif = %s
+          ''', Nif).fetchone()
+    return render_template('Fatura.html', operador=operador,cliente=cliente)
 
 
 if __name__ == '__main__':

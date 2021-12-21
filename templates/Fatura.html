@@ -1,12 +1,66 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1 xmlns="http://www.w3.org/1999/html">{% block title %}TRANSACAO {% endblock %}</h1>
+
+<h1 >{% block title %}TRANSACAO  {% endblock %}</h1>
 
 
 <html>
+<body>
+    <form action=""  method="get" id="form1">
+    <h4> Digite o NIF:</h4>
+    <input name="NIF" type="number"/>
+    <button name="OK" type="submit" value="OK"input="CodBarra">OK</button>
+    <br>
+    <br>
+    
+    <h3>Nome : {{ cliente.Nome }}</h3>
+    <br>
+<br>
+
+    </form>
 
 </body>
 </html>
+<br>
+<br>
 
+<form action="#" method="post" name="a">
+    <input name="button" type="submit" value="CONFIRMAR" input="OK"/>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<form name="back" action="javascript:window.open('/operador/{{operador.NumOP}}/novaTransacao','_self')">
+    <button name="backTran" type="submit"> VOLTAR TRANSACAO </button>
+</form>
 {% endblock %}
