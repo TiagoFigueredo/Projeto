@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+<h1 >{% block title %}TRANSACAO  {% endblock %}</h1>
+
+
+<html>
+<body>
+    <form action=""  method="get" id="form1">
+    <h4> Digite o código de barras:</h4>
+    <input name="CodBarra" type="number"/>
+    <button name="OK" type="submit" value="OK"input="CodBarra">OK</button>
+    <br>
+    <br>
+    
+    <h3>Nome  do artigo: {{ artigo.Nome }}</h3>
+    <h3>Preco do artigo: {{ artigo.Preco }}$</h3>
+    <br>
+<br>
+
+    </form>
+
+</body>
+</html>
+<br>
+<br>
+
+<form action="#" method="post" name="a">
+    <input name="button" type="submit" value="CONFIRMAR" input="OK"/>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<form name="back" action="javascript:window.open('/operador/{{operador.NumOP}}/novaTransacao','_self')">
+    <button name="backTran" type="submit"> VOLTAR TRANSACAO </button>
+</form>
+{% endblock %}

@@ -1,0 +1,15 @@
+2021-12-15 13:02:41 - INFO - Connected to database mstream
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+2021-12-15 13:02:41 - INFO -  * Running on http://0.0.0.0:9000/ (Press CTRL+C to quit)
+2021-12-15 13:03:03 - INFO - 127.0.0.1 - - [15/Dec/2021 13:03:03] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:11:36 - INFO - 127.0.0.1 - - [15/Dec/2021 13:11:36] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:11:36 - INFO - 127.0.0.1 - - [15/Dec/2021 13:11:36] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:11:37 - INFO - 127.0.0.1 - - [15/Dec/2021 13:11:37] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:12:55 - INFO - 127.0.0.1 - - [15/Dec/2021 13:12:55] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:13:03 - INFO - 127.0.0.1 - - [15/Dec/2021 13:13:03] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:13:04 - INFO - 127.0.0.1 - - [15/Dec/2021 13:13:04] "[37mGET / HTTP/1.1[0m" 200 -
+2021-12-15 13:20:56 - INFO - 127.0.0.1 - - [15/Dec/2021 13:20:56] "[37mGET / HTTP/1.1[0m" 200 -

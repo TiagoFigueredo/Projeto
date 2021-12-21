@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1 xmlns="http://www.w3.org/1999/html">{% block title %}TRANSACAO NÚMERO {{transacao.NumTransacao}} {% endblock %}</h1>
+
+<html>
+<body>
+    <h1>TIME: {{transacao.Hora }}</h1>
+<form name="goTransacao" method="get">
+    <button name="finaliza" type="submit" value="finaliza"> FINALIZAR TRANSACAO</button>
+</form>
+
+
+<form name="goTransacao" action="javascript:window.open('/operador/{{operador.NumOP}}/novaTransacao/addArtigo','_self')">
+    <button name="addArt" type="submit"> ADICIONAR ARTIGO</button>
+</form>
+
+
+<form name="goTransacao" action="javascript:window.open('/operador/{{operador.NumOP}}/novaTransacao/Fatura','_self')">
+    <button name="fatura" type="submit"> FATURA </button>
+</form>
+
+</body>
+</html>
+
+{% endblock %}

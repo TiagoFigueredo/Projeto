@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Bem Vindo {{ operador.Nome }} {% endblock %}</h1>
+  <h2>TURNO: {{ turno.NTurno }} </h2>
+    <h3> INÍCIO: {{turno.Inicio}} </h3>
+
+
+<html>
+<body>
+<form name="login" action="javascript:window.open('/operador/{{operador.NumOP}}/logout','_self')">
+    <button name="logOut" type="submit"> Sair</button>
+</form>
+<form name="goTransacao" action="javascript:window.open('/operador/{{operador.NumOP}}/novaTransacao','_self')">
+    <button name="goTran" type="submit"> NOVA TRANSACAO</button>
+</form>
+</body>
+</html>
+
+{% endblock %}

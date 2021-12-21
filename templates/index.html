@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %}WINCOR
+    <br>
+    <img src="https://solvimm.com/wp-content/uploads/2019/11/Destacada_Qual_tipo_de_Banco_de_Dados_utilizar-1024x576.png"
+         height="100" width="100">
+    {% endblock %}</h1>
+<html>
+<head>
+    <title> LOGIN </title>
+</head>
+<body>
+<form name="login"
+      action="javascript:window.open('/operador/'+document.forms['login'].elements['numeroOP'].value,'_self')">
+    <input name="numeroOP" type="number"/><input type="submit" value="Entrar"/>
+</form>
+</body>
+</html>
+
+
+{% endblock %}
+
