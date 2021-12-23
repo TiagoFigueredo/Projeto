@@ -21,7 +21,7 @@ def init():
 
 @APP.route('/operador/<int:numero>/')
 def entraOperador(numero):
-    
+
     operador = db.execute(
         '''
           SELECT NumOP, Nome, Salario
@@ -69,10 +69,10 @@ def goTransacao(numero):
           WHERE  NumOP = %s
           ''', numero).fetchone()
     transacao = db.execute(
-          '''
+        '''
           SELECT * FROM TRANSACAO ORDER BY NumTransacao DESC LIMIT 1
           ''').fetchone()
-    if request.method == "GET" and request.args.get("finaliza")=="finaliza":
+    if request.method == "GET" and request.args.get("finaliza") == "finaliza":
         transacao = db.execute(
             '''
                 INSERT INTO TRANSACAO()
@@ -80,11 +80,11 @@ def goTransacao(numero):
             '''
         )
         db.commit()
-        return redirect(url_for("entraOperador",numero=numero))
-    return render_template('transacao.html', operador=operador,transacao=transacao)
+        return redirect(url_for("entraOperador", numero=numero))
+    return render_template('transacao.html', operador=operador, transacao=transacao)
 
 
-@APP.route('/operador/<int:numero>/novaTransacao/addArtigo', methods=["GET","POST"])
+@APP.route('/operador/<int:numero>/novaTransacao/addArtigo', methods=["GET", "POST"])
 def adArtigo(numero):
     operador = db.execute(
         '''
@@ -92,18 +92,43 @@ def adArtigo(numero):
           FROM OPERADOR 
           WHERE  NumOP = %s
           ''', numero).fetchone()
-    CodBarra=0
+    CodBarra = 0
     if request.method == "GET":
         if request.args.get("OK") == "OK":
             CodBarra = request.args.get("CodBarra")
-    elif(request.form["button"]=="CONFIRMAR"):
-            CodBarra = request.args.get("CodBarra")
-            transacao = db.execute(
-                '''
+            a = db.execute(
+                    '''
+            SELECT *
+            FROM ARTIGO 
+            WHERE  CodBarra = %s
+            ''', CodBarra).fetchone()
+            if a is None:
+                abort(404, 'ARTIGO NÃO EXISTE'.format(numero))
+            a = db.execute(
+                    '''
+            SELECT *
+            FROM ARTIGO
+            NATURAL JOIN ESTOQUE 
+            WHERE CodBarra = %s 
+            AND
+            Quantidade IS NOT NULL
+            ''', CodBarra).fetchone()
+            if a is None:
+                abort(404, 'ARTIGO NÃO PRESENTE NO ESTOQUE'.format(numero))     
+    elif(request.form["button"] == "CONFIRMAR"):
+        CodBarra = request.args.get("CodBarra")
+        transacao = db.execute(
+            '''
                 INSERT INTO ADICIONA_ARTIGO(CodBarra,NumTransacao)
                 SELECT a.CodBarra,b.NumTransacao
                 FROM ARTIGO a JOIN (SELECT * FROM TRANSACAO ORDER BY NumTransacao DESC LIMIT 1) b ON a.CodBarra = %s;
-                ''',CodBarra).fetchone()
+                ''', CodBarra).fetchone()
+        aux =  db.execute(
+            '''
+                UPDATE ESTOQUE
+                SET Quantidade = Quantidade - 1
+                WHERE CodBarra = %s
+                ''', CodBarra).fetchone()
     db.commit()
     artigo = db.execute(
         '''
@@ -111,11 +136,11 @@ def adArtigo(numero):
           FROM ARTIGO 
           WHERE  CodBarra = %s
           ''', CodBarra).fetchone()
-    return render_template('addArtigo.html', operador=operador,artigo=artigo)
+
+    return render_template('addArtigo.html', operador=operador, artigo=artigo)
 
 
-
-@APP.route('/operador/<int:numero>/novaTransacao/Fatura', methods=["GET","POST"])
+@APP.route('/operador/<int:numero>/novaTransacao/Fatura', methods=["GET", "POST"])
 def Fatura(numero):
     operador = db.execute(
         '''
@@ -123,26 +148,36 @@ def Fatura(numero):
           FROM OPERADOR 
           WHERE  NumOP = %s
           ''', numero).fetchone()
-    Nif=0
+    Nif = 0
     if request.method == "GET":
         if request.args.get("OK") == "OK":
             Nif = request.args.get("NIF")
-    elif(request.form["button"]=="CONFIRMAR"):
-            Nif = request.args.get("NIF")
-            transacao = db.execute(
-                '''
+            a = db.execute(
+                    '''
+            SELECT *
+            FROM CLIENTE 
+            WHERE  Nif = %s
+            ''', Nif).fetchone()
+            if a is None:
+                abort(404, 'CLIENTE NÃO EXISTE'.format(numero))
+
+    elif(request.form["button"] == "CONFIRMAR"):
+        Nif = request.args.get("NIF")
+        transacao = db.execute(
+            '''
                 INSERT INTO FATURA(Nif,NumTransacao)
                 SELECT a.Nif,b.NumTransacao
                 FROM CLIENTE a JOIN (SELECT * FROM TRANSACAO ORDER BY NumTransacao DESC LIMIT 1) b ON a.Nif = %s;
-                ''',Nif).fetchone()
-    db.commit()
+                ''', Nif).fetchone()
     cliente = db.execute(
         '''
           SELECT *
           FROM CLIENTE 
           WHERE  Nif = %s
           ''', Nif).fetchone()
-    return render_template('Fatura.html', operador=operador,cliente=cliente)
+    db.commit()
+
+    return render_template('Fatura.html', operador=operador, cliente=cliente)
 
 
 if __name__ == '__main__':
