@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Bem Vindo Supervisor {% endblock %}</h1>
+
+
+<html>
+<body>
+<h1>CONSULTAR </h1>
+
+<form name="a" action="javascript:window.open('/supervisor/ConsultarTransacao','_self')">
+  <button name="Transacao" type="submit"> TRANSACAO </button>
+</form>
+
+
+<form name="b" action="javascript:window.open('/supervisor/ConsultarTurno','_self')">
+  <button name="Turno" type="submit"> TURNO </button>
+</form>
+
+
+
+<form name="c" action="javascript:window.open('/supervisor/ConsultarOperador','_self')">
+  <button name="Operador" type="submit"> OPERADOR </button>
+</form>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1>CRIAR </h1>
+
+
+
+</body>
+</html>
+
+{% endblock %}

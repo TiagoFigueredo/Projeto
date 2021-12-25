@@ -25,13 +25,17 @@ def entraOperador(numero):
     operador = db.execute(
         '''
           SELECT NumOP, Nome, Salario
-          FROM OPERADOR 
+          FROM OPERADOR
           WHERE  NumOP = %s
           ''', numero).fetchone()
 
+
+    if numero == 99:
+        return redirect(url_for("entraSupervisor"))
+
     if operador is None:
         abort(404, 'OPERADOR NÃO EXISTE'.format(numero))
-
+    
     turno = db.execute(
         '''
         SELECT NTurno, NumOP, Inicio
@@ -41,6 +45,22 @@ def entraOperador(numero):
         ''', numero).fetchone()
 
     return render_template('OperadorPage.html', operador=operador, turno=turno)
+
+@APP.route('/supervisor/')
+def entraSupervisor():
+    return render_template('SupervisorPage.html')
+
+@APP.route('/supervisor/ConsultarTransacao')
+def ConsultarTransacao():
+    return render_template('ConsultarTransacao.html')
+@APP.route('/supervisor/ConsultarOperador')
+def ConsultarOperador():
+    return render_template('ConsultarOperador.html')
+@APP.route('/supervisor/ConsultarTurno')
+def ConsultarTurno():
+    return render_template('ConsultarTurno.html')
+
+
 
 
 @APP.route('/operador/<int:numero>/logout')
@@ -81,7 +101,7 @@ def goTransacao(numero):
         )
         db.commit()
         return redirect(url_for("entraOperador", numero=numero))
-    return render_template('transacao.html', operador=operador, transacao=transacao)
+    return render_template('NovaTransacao.html', operador=operador, transacao=transacao)
 
 
 @APP.route('/operador/<int:numero>/novaTransacao/addArtigo', methods=["GET", "POST"])
