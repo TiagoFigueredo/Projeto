@@ -50,9 +50,70 @@ def entraOperador(numero):
 def entraSupervisor():
     return render_template('SupervisorPage.html')
 
+@APP.route('/supervisor/ConsultarTransacao/<int:NumTransacao>/')
+def ConsultarTransacaoIndividual(NumTransacao):
+    transacao = db.execute(
+            '''
+           SELECT *,c.Preco*b.Quantidade AS TOTAL FROM TRANSACAO a
+NATURAL JOIN ADICIONA_ARTIGO b
+NATURAL JOIN ARTIGO c
+WHERE NumTransacao=%s;
+            ''',NumTransacao).fetchall()
+    if transacao is None:
+        abort(404, 'TRANSAÇÃO NÃO EXISTE'.format(NumTransacao))
+
+    operador = db.execute(
+            '''
+            SELECT * FROM TURNO  NATURAL JOIN OPERADOR WHERE NumTransacao = %s;
+            ''',NumTransacao).fetchone()    
+    cliente = db.execute(
+            '''
+            SELECT * FROM FATURA NATURAL JOIN CLIENTE WHERE NumTransacao = %s;
+            ''',NumTransacao).fetchone()        
+    return render_template("TransacaoIndividual.html",transacao=transacao,operador=operador,cliente=cliente)
+
 @APP.route('/supervisor/ConsultarTransacao')
 def ConsultarTransacao():
-    return render_template('ConsultarTransacao.html')
+    transacao = "";
+    if request.method == "GET":
+        if request.args.get("NumTransacao") == "OK":
+            transacao = db.execute(
+            '''
+            SELECT NumTransacao,Hora 
+            FROM TRANSACAO
+            ORDER BY NumTransacao
+            ''').fetchall()
+        if request.args.get("DataRecente") == "OK":
+            transacao = db.execute(
+            '''
+            SELECT NumTransacao,Hora 
+            FROM TRANSACAO
+            ORDER BY Hora DESC
+            ''').fetchall()
+        if request.args.get("DataAntiga") == "OK":
+            transacao = db.execute(
+            '''
+            SELECT NumTransacao,Hora 
+            FROM TRANSACAO
+            ORDER BY Hora 
+            ''').fetchall()
+        if request.args.get("back") == "OK":
+            return redirect(url_for("entraSupervisor"))
+        if request.args.get("OK") == "OK":
+            NumOP=request.args.get("NumOP")
+            transacao = db.execute(
+            '''
+            SELECT NumTransacao,Hora 
+            FROM TRANSACAO
+            NATURAL JOIN TURNO
+            WHERE NumOP = %s
+            ''',NumOP).fetchall()
+
+    return render_template('ConsultarTransacao.html',transacao=transacao)
+
+
+
+
 @APP.route('/supervisor/ConsultarOperador')
 def ConsultarOperador():
     return render_template('ConsultarOperador.html')
@@ -99,7 +160,21 @@ def goTransacao(numero):
                 VALUES()
             '''
         )
+        a = db.execute(
+            '''
+                INSERT INTO TURNO(NTurno,NumTransacao,NumOP,Inicio)
+                                
+                    SELECT a.NTurno,b.NumTransacao,%s,a.Inicio 
+                    FROM TURNO a
+                    INNER JOIN TRANSACAO b 
+                    ORDER BY b.NumTransacao DESC , Inicio DESC 
+                    LIMIT 1;
+            '''
+        ,numero).fetchone()
         db.commit()
+        #ESSA FUNCIONALIDADE NÃO FUNCIONARÁ POIS:
+        #PRECISARIA SAIR DO APP.PY E ENTRAR NOVAMENTE PARA VALIDAR POIS
+        #O DB.COMMIT SO REALIZA MUDANÇAS DEPOIS DE SAIR
         return redirect(url_for("entraOperador", numero=numero))
     return render_template('NovaTransacao.html', operador=operador, transacao=transacao)
 

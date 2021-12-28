@@ -7,9 +7,35 @@
 
 <html>
 <body>
+    
 
+    <form name="b" action="javascript:window.open('/supervisor','_self')">
+        <button name="back" type="submit" value="OK"> VOLTAR SUPERVISOR </button>
+      </form>
+    </html>
+    
+        <br>
 
+        <h4> AGRUPAR POR NUMERO DE OPERADOR:</h4>
+        <form action=""  method="get" id="form4">
+            <h4> Digite o NumOP:</h4>
+            <input name="NumOP" type="number"/>
+            <button name="OK" type="submit" value="OK"input="NumOP">OK</button>
+        <h4> ORDENAR POR:</h4>
 
+        <form action=""  method="get" id="form1">
+        <button name="NumTransacao" type="submit" value="OK">Numero Transacao</button>      
+        <br>
+        <form action=""  method="get" id="form2">
+        <button name="DataRecente" type="submit" value="OK">Data mais recente</button>    
+        <br>    
+        <form action=""  method="get" id="form3">
+        <button name="DataAntiga" type="submit" value="OK">Data mais antiga</button>
+        <br>
+        {% for m in transacao %}      
+            <li><a href="/supervisor/ConsultarTransacao/{{m .NumTransacao }}">{{m.NumTransacao}}</a></li>
+        {% endfor %}
+     
 
 
 
@@ -17,9 +43,5 @@
 </body>
 
 
-<form name="b" action="javascript:window.open('/supervisor','_self')">
-    <button name="back" type="submit"> VOLTAR SUPERVISOR </button>
-  </form>
-</html>
 
 {% endblock %}

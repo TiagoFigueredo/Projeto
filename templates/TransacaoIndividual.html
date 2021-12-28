@@ -1,0 +1,53 @@
+
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}TRANSAÇÃO NÚMERO: {{transacao.NumTransacao}} {% endblock %}</h1>
+
+
+<html>
+<body>
+<h1>HORA DA TRANSAÇÃO: {{transacao.Hora}}</h1>
+
+<h1>OPERADOR QUE REALIZOU: {{operador.Nome}}</h1>
+
+
+<h1>ARTIGOS: </h1>
+{% set total = namespace(value=0) %}
+{% for m  in transacao %}      
+        {{m.Quantidade}}x {{m.CodBarra}} - {{m.Nome}} - {{m.Preco}}$
+        <br>
+        {% set total.value = total.value + m.TOTAL %}
+
+{% endfor %}
+
+
+<h1>TOTAL GASTO: {{total.value}}$</h1>
+
+
+
+    {% if cliente %}
+        <h1>CLIENTE ASSOCIADO NA FATURA:</h1>
+        {{cliente.Nif}}
+        <br>
+        {{cliente.Nome}}
+        <br>
+        {{cliente.Cidade}}
+        <br>
+        {{cliente.Rua}}
+        <br>
+        {{cliente.CodPostal}}
+        <br>
+        {% if cliente.Complemento %}
+            {{cliente.Complemento}}
+        {% endif %}
+
+    {% endif %}
+
+
+
+
+</body>
+</html>
+
+{% endblock %}
